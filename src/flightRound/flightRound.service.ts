@@ -1,34 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import axios, { Method } from 'axios';
-import { RateLimiterMemory } from 'rate-limiter-flexible';
-
-const rateLimiter = new RateLimiterMemory({
-  points: 1, // Number of points
-  duration: 1, // Per second
-});
+import { FlightRoundDto } from './dtos/flightRound.dto';
 
 @Injectable()
 export class FlightRoundService {
   private readonly apiUrl = 'https://sky-scanner3.p.rapidapi.com/flights/search-roundtrip';
   private readonly apiHost = 'sky-scanner3.p.rapidapi.com';
-  private readonly apiKey = '715696da99msh4eb66db00001963p17718bjsneb0c681d5fa1';
+  // private readonly apiKey = '715696da99msh4eb66db00001963p17718bjsneb0c681d5fa1';
+  // private readonly apiKey = '574679b39emsh4ab6b34a8e5646bp1b5f4ajsn38891a3a3403';
+  private readonly apiKey = 'c033ec79demshb519127d006c588p126f0ajsna590df900cea';
 
-  async fetchRoundFlights(fromEntityId: string, toEntityId: string, departDate: string, returnDate: string, adults: number, children: number, cabinClass: string): Promise<any> {
+  async fetchRoundFlights(params: FlightRoundDto): Promise<any> {
     try {
-      await rateLimiter.consume('flightSearch', 1); // Consume 1 point per request
+      console.log('Request Params:', params);
 
       const options = {
         method: 'GET' as Method,
         url: this.apiUrl,
-        params: {
-          fromEntityId: fromEntityId,
-          toEntityId: toEntityId,
-          departDate: departDate,
-          returnDate: returnDate,
-          adults: adults,
-          children: children,
-          cabinClass: cabinClass,
-        },
+        params,
         headers: {
           'x-rapidapi-host': this.apiHost,
           'x-rapidapi-key': this.apiKey,
@@ -36,12 +25,13 @@ export class FlightRoundService {
       };
 
       const response = await axios.request(options);
-      console.log('Round Flight Search Response:', response.data);
+      console.log('One-Way Flight Search Response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching round flights:', error);
-      throw new Error('Failed to fetch round flights');
+      console.error('Error fetching one-way flights:', error.response ? error.response.data : error.message);
+      throw new Error('Failed to fetch one-way flights');
     }
   }
 }
 
+    

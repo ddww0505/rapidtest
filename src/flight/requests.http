@@ -1,0 +1,28 @@
+###one way test
+GET http://localhost:3000/flights/search-one-way
+Content-Type: application/json
+
+{
+  "fromEntityId": "NYCA",
+  "toEntityId": "LAXA",
+  "departDate": "2024-08-01",
+  "adults": 1,
+  "children": 0,
+  "cabinClass": "economy"
+}
+
+###roundtrip test
+GET http://localhost:3000/flights/search-roundtrip
+Content-Type: application/json
+
+{
+  "fromEntityId": "NYCA",
+  "toEntityId": "LAXA",
+  "departDate": "2024-08-01",
+  "returnDate": "2024-08-05",
+  "adults": 1,
+  "children": 0,
+  "cabinClass": "economy"
+}
+
+
