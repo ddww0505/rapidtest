@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "fromEntityId": "NYCA",
   "toEntityId": "LAXA",
-  "departDate": "2024-08-01",
+  "departDate": "2024-08-09",
   "adults": 1,
   "children": 0,
   "cabinClass": "economy"
@@ -18,11 +18,37 @@ Content-Type: application/json
 {
   "fromEntityId": "NYCA",
   "toEntityId": "LAXA",
-  "departDate": "2024-08-01",
-  "returnDate": "2024-08-05",
+  "departDate": "2024-08-09",
+  "returnDate": "2024-08-13",
   "adults": 1,
   "children": 0,
   "cabinClass": "economy"
 }
 
+###add money one way test
+GET http://localhost:3000/flights/search-one-way
+Content-Type: application/json
+
+{
+  "fromEntityId": "NYCA",
+  "toEntityId": "LAXA",
+  "departDate": "2024-08-09",
+  "adults": 1,
+  "children": 0,
+  "cabinClass": "economy",
+  "responseType": "sorted"
+}
+
+###near money
+GET http://localhost:3000/flights/search-one-way
+Content-Type: application/json
+
+{
+  "fromEntityId": "NYCA",
+  "toEntityId": "LAXA",
+  "departDate": "2024-08-09",
+  "adults": 1,
+  "children": 0,
+  "cabinClass": "economy",
+}
 

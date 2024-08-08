@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString, IsOptional } from "class-validator";
 
 export class FlightDto{
   @IsString()
@@ -18,4 +18,12 @@ export class FlightDto{
 
   @IsString()
   cabinClass: string;
+
+  @IsOptional()
+  @IsString()
+  responseType?: 'original' | 'sorted' | 'both';
+
+  @IsOptional()
+  @IsNumber()
+  expectedMoney?: number;    //still doing
 }

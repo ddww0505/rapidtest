@@ -17,19 +17,63 @@ export class FlightService {
       const options = {
         method: 'GET' as Method,
         url: this.apiUrl,
-        params,
+        params: {
+          fromEntityId: params.fromEntityId,
+          toEntityId: params.toEntityId,
+          departDate: params.departDate,
+          adults: params.adults,
+          children: params.children,
+          cabinClass: params.cabinClass,
+        },
         headers: {
           'x-rapidapi-host': this.apiHost,
           'x-rapidapi-key': this.apiKey,
         },
       };
 
+      // Fetch flight data from the API
       const response = await axios.request(options);
       console.log('One-Way Flight Search Response:', response.data);
-      return response.data;
+
+      const originalResponse = response.data;
+      const sortedFlights = this.sortFlightsByPrice(response.data);
+
+      if (params.responseType === 'sorted') {
+        return sortedFlights;
+      } else if (params.responseType === 'original') {
+        return originalResponse;
+      } else if (params.responseType === 'both') {
+        return {
+          original: originalResponse,
+          sorted: sortedFlights,
+        };
+      }
+
+      return originalResponse; // Default to original if no responseType specified
     } catch (error) {
       console.error('Error fetching one-way flights:', error.response ? error.response.data : error.message);
       throw new Error('Failed to fetch one-way flights');
     }
   }
+
+  private sortFlightsByPrice(data: any): any {
+    if (data && data.data && data.data.itineraries && Array.isArray(data.data.itineraries) && data.data.itineraries.length > 0) {
+      const sortedItineraries = data.data.itineraries
+        .map((itinerary: any) => ({
+          id: itinerary.id,
+          price: itinerary.price.raw,
+        }))
+        .sort((a: any, b: any) => a.price - b.price); // Sort by price descending
+  
+      return {
+        itineraries: sortedItineraries,
+      };
+    }
+  
+    // Return empty itineraries array if no itineraries are present
+    return {
+      itineraries: []
+    };
+  }
+  
 }
