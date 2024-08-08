@@ -38,17 +38,10 @@ export class FlightService {
       const originalResponse = response.data;
       const sortedFlights = this.sortFlightsByPrice(response.data);
 
-      if (params.responseType === 'sorted') {
+      if (params.sorted === true) {
         return sortedFlights;
-      } else if (params.responseType === 'original') {
-        return originalResponse;
-      } else if (params.responseType === 'both') {
-        return {
-          original: originalResponse,
-          sorted: sortedFlights,
-        };
-      }
-
+      } 
+    
       return originalResponse; // Default to original if no responseType specified
     } catch (error) {
       console.error('Error fetching one-way flights:', error.response ? error.response.data : error.message);

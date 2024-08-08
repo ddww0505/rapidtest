@@ -36,7 +36,7 @@ Content-Type: application/json
   "adults": 1,
   "children": 0,
   "cabinClass": "economy",
-  "responseType": "sorted"
+  "sorted": true
 }
 
 ###near money
@@ -49,6 +49,6 @@ Content-Type: application/json
   "departDate": "2024-08-09",
   "adults": 1,
   "children": 0,
-  "cabinClass": "economy",
+  "cabinClass": "economy"
 }
 
