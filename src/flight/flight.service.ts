@@ -36,7 +36,8 @@ export class FlightService {
       console.log('One-Way Flight Search Response:', response.data);
 
       const originalResponse = response.data;
-      const sortedFlights = this.sortFlightsByPrice(response.data);
+      let filteredFlights = this.filterFlightsByPrice(response.data, params.minPrice, params.maxPrice);
+      const sortedFlights = this.sortFlightsByPrice(filteredFlights);
 
       if (params.sorted === true) {
         return sortedFlights;
@@ -68,5 +69,36 @@ export class FlightService {
       itineraries: []
     };
   }
+ 
+  private filterFlightsByPrice(data: any, minPrice?: number, maxPrice?: number): any {
+    if (data && data.data && data.data.itineraries && Array.isArray(data.data.itineraries)) {
+      // 如果沒有提供 minPrice 和 maxPrice，返回原始結果
+      if (minPrice === undefined && maxPrice === undefined) {
+        return data;
+      }
+      
+      const filteredItineraries = data.data.itineraries.filter((itinerary: any) => {
+        const price = itinerary.price.raw;
+        return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+      });
   
+      return {
+        ...data,
+        data: {
+          ...data.data,
+          itineraries: filteredItineraries,
+        },
+      };
+    }
+  
+    // 返回空的 itineraries 如果沒有找到任何數據
+    return {
+      ...data,
+      data: {
+        itineraries: [],
+      },
+    };
+  }
+  
+
 }

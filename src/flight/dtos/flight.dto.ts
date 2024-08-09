@@ -1,4 +1,5 @@
 import { IsNumber, IsString, IsOptional, IsBoolean } from "class-validator";
+import { Min } from "class-validator";
 
 export class FlightDto{
   @IsString()
@@ -20,10 +21,20 @@ export class FlightDto{
   cabinClass: string;
 
   @IsOptional()
+  @IsString()
+  stops?: 'direct' | '1stop' | '2stops';
+
+  @IsOptional()
   @IsBoolean()
   sorted?: boolean;
 
   @IsOptional()
   @IsNumber()
-  expectedMoney?: number;    //still doing
+  @Min(0)
+  minPrice?: number; // Optional minimum price
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  maxPrice?: number; // Optional maximum price
 }
