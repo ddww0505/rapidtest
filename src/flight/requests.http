@@ -51,7 +51,7 @@ Content-Type: application/json
   "children": 0,
   "cabinClass": "economy",
   "minPrice": "0",
-  "maxPrice": "290",
+  "maxPrice": "500",
   "sorted": true
 }
 
