@@ -7,13 +7,11 @@ export class FlightService {
   private readonly apiUrl = 'https://sky-scanner3.p.rapidapi.com/flights/search-one-way';
   private readonly apiHost = 'sky-scanner3.p.rapidapi.com';
   // private readonly apiKey = '715696da99msh4eb66db00001963p17718bjsneb0c681d5fa1';
-  // private readonly apiKey = '574679b39emsh4ab6b34a8e5646bp1b5f4ajsn38891a3a3403';
-  private readonly apiKey = 'c033ec79demshb519127d006c588p126f0ajsna590df900cea';
+  private readonly apiKey = '574679b39emsh4ab6b34a8e5646bp1b5f4ajsn38891a3a3403';
+  //private readonly apiKey = 'c033ec79demshb519127d006c588p126f0ajsna590df900cea';
 
   async fetchOneWayFlights(params: FlightDto): Promise<any> {
     try {
-      console.log('Request Params:', params);
-
       const options = {
         method: 'GET' as Method,
         url: this.apiUrl,
@@ -30,23 +28,55 @@ export class FlightService {
           'x-rapidapi-key': this.apiKey,
         },
       };
-
+  
       // Fetch flight data from the API
       const response = await axios.request(options);
       console.log('One-Way Flight Search Response:', response.data);
-
+  
+      // Extract sessionId from the response
+      const sessionId = response.data.data?.context?.sessionId;
+      if (!sessionId) {
+        throw new Error('Session ID not found in response');
+      }
+  
+      // Fetch additional details using sessionId
+      const incompleteFlightDetails = await this.fetchIncompleteFlightDetails(sessionId);
+  
+      // Process and return the combined results
       const originalResponse = response.data;
       let filteredFlights = this.filterFlightsByPrice(response.data, params.minPrice, params.maxPrice);
       const sortedFlights = this.sortFlightsByPrice(filteredFlights);
-
+  
       if (params.sorted === true) {
         return sortedFlights;
-      } 
-    
-      return originalResponse; // Default to original if no responseType specified
+      }
+      
+      return incompleteFlightDetails;
+
     } catch (error) {
       console.error('Error fetching one-way flights:', error.response ? error.response.data : error.message);
       throw new Error('Failed to fetch one-way flights');
+    }
+  }  
+
+  private async fetchIncompleteFlightDetails(sessionId: string): Promise<any> {
+    const options = {
+      method: 'GET' as Method,
+      url: 'https://sky-scanner3.p.rapidapi.com/flights/search-incomplete',
+      params: { sessionId },
+      headers: {
+        'x-rapidapi-host': this.apiHost,
+        'x-rapidapi-key': this.apiKey,
+      },
+    };
+
+    try {
+      const response = await axios.request(options);
+      console.log('Incomplete Flight Details:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching incomplete flight details:', error.response ? error.response.data : error.message);
+      throw new Error('Failed to fetch incomplete flight details');
     }
   }
 
@@ -99,6 +129,4 @@ export class FlightService {
       },
     };
   }
-  
-
 }
