@@ -16,13 +16,14 @@ GET http://localhost:3000/flights/search-roundtrip
 Content-Type: application/json
 
 {
-  "fromEntityId": "NYCA",
+  "fromEntityId": "TPE",
   "toEntityId": "LAXA",
   "departDate": "2024-08-12",
-  "returnDate": "2024-08-16",
+  "returnDate": "2024-08-13",
   "adults": 1,
   "children": 0,
-  "cabinClass": "economy"
+  "cabinClass": "economy",
+  "sorted": true
 }
 
 ###add money one way test
@@ -90,6 +91,6 @@ Content-Type: application/json
   "minDuration": 0,
   "maxDuration": 800,
   "minDeparture":  "2024-08-12T00:00:00",
-  "maxDeparture":  "2024-08-12T12:00:00",
+  "maxDeparture":  "2024-08-12T12:00:00"
 }
 
