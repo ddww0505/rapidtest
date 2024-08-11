@@ -43,7 +43,6 @@ export class FlightService {
       const incompleteFlightDetails = await this.fetchIncompleteFlightDetails(sessionId);
   
       // Process and return the combined results
-      const originalResponse = response.data;
       let filteredFlights = this.filterFlightsByPrice(incompleteFlightDetails, params.minPrice, params.maxPrice);
       const sortedFlights = this.sortFlightsByPrice(filteredFlights);
   
@@ -86,6 +85,9 @@ export class FlightService {
         .map((itinerary: any) => ({
           id: itinerary.id,
           price: itinerary.price.raw,
+          departure: itinerary.legs[0].departure,
+          arrival: itinerary.legs[0].arrival,
+          durationInMinutes: itinerary.legs[0].durationInMinutes,
         }))
         .sort((a: any, b: any) => a.price - b.price); // Sort by price descending
   
