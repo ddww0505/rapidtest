@@ -73,3 +73,23 @@ Content-Type: application/json
   "maxDuration": 800
 }
 
+###departure time test
+GET http://localhost:3000/flights/search-one-way
+Content-Type: application/json
+
+{
+  "fromEntityId": "NYCA",
+  "toEntityId": "LAXA",
+  "departDate": "2024-08-12",
+  "adults": 1,
+  "children": 0,
+  "cabinClass": "economy",
+  "minPrice": "0",
+  "maxPrice": "500",
+  "sorted": true,
+  "minDuration": 0,
+  "maxDuration": 800,
+  "minDeparture":  "2024-08-12T00:00:00",
+  "maxDeparture":  "2024-08-12T12:00:00",
+}
+

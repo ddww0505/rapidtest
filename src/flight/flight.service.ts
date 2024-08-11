@@ -48,9 +48,13 @@ export class FlightService {
         params.minPrice,
         params.maxPrice,
         params.minDuration,
-        params.maxDuration
+        params.maxDuration,
+        params.minDeparture,
+        params.maxDeparture,
+        params.minArrival,
+        params.maxArrival
       );
-      
+
       const sortedFlights = this.sortFlightsByPrice(filteredFlights);
   
       if (params.sorted === true) {
@@ -109,36 +113,43 @@ export class FlightService {
     };
   }
  
-  private filterFlights(data: any, minPrice?: number, maxPrice?: number, minDuration?: number, maxDuration?: number): any {
-    if (data && data.data && data.data.itineraries && Array.isArray(data.data.itineraries)) {
-      const filteredItineraries = data.data.itineraries.filter((itinerary: any) => {
-        const price = itinerary.price.raw;
-        const duration = itinerary.legs.reduce((total: number, leg: any) => total + leg.durationInMinutes, 0);
-        
-        return (
-          (!minPrice || price >= minPrice) &&
-          (!maxPrice || price <= maxPrice) &&
-          (!minDuration || duration >= minDuration) &&
-          (!maxDuration || duration <= maxDuration)
-        );
-      });
-  
-      return {
-        ...data,
-        data: {
-          ...data.data,
-          itineraries: filteredItineraries,
-        },
-      };
-    }
-  
-    // Return empty itineraries if no data is found
+  private filterFlights(data: any, minPrice?: number, maxPrice?: number, minDuration?: number, maxDuration?: number, minDeparture?: string, maxDeparture?: string, minArrival?: string, maxArrival?: string): any {
+  if (data && data.data && data.data.itineraries && Array.isArray(data.data.itineraries)) {
+    const filteredItineraries = data.data.itineraries.filter((itinerary: any) => {
+      const price = itinerary.price.raw;
+      const duration = itinerary.legs.reduce((total: number, leg: any) => total + leg.durationInMinutes, 0);
+      const departure = new Date(itinerary.legs[0].departure);
+      const arrival = new Date(itinerary.legs[0].arrival);
+
+      return (
+        (!minPrice || price >= minPrice) &&
+        (!maxPrice || price <= maxPrice) &&
+        (!minDuration || duration >= minDuration) &&
+        (!maxDuration || duration <= maxDuration) &&
+        (!minDeparture || departure >= new Date(minDeparture)) &&
+        (!maxDeparture || departure <= new Date(maxDeparture)) &&
+        (!minArrival || arrival >= new Date(minArrival)) &&
+        (!maxArrival || arrival <= new Date(maxArrival))
+      );
+    });
+
     return {
       ...data,
       data: {
-        itineraries: [],
+        ...data.data,
+        itineraries: filteredItineraries,
       },
     };
   }
+
+  // Return empty itineraries if no data is found
+  return {
+    ...data,
+    data: {
+      itineraries: [],
+    },
+  };
+}
+
   
 }

@@ -1,5 +1,6 @@
 import { IsNumber, IsString, IsOptional, IsBoolean } from "class-validator";
 import { Min } from "class-validator";
+import { IsDateString } from "class-validator";
 
 export class FlightDto{
   @IsString()
@@ -45,4 +46,20 @@ export class FlightDto{
   @IsOptional()
   @IsNumber()
   maxDuration?: number;
+
+  @IsOptional()
+  @IsDateString()
+  minDeparture?: string;
+
+  @IsOptional()
+  @IsDateString()
+  maxDeparture?: string;
+
+  @IsOptional()
+  @IsDateString()
+  minArrival?: string;
+
+  @IsOptional()
+  @IsDateString()
+  maxArrival?: string;
 }
