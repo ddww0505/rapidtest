@@ -37,4 +37,12 @@ export class FlightDto{
   @IsNumber()
   @Min(0)
   maxPrice?: number; // Optional maximum price
+
+  @IsOptional()
+  @IsNumber()
+  minDuration?: number;
+
+  @IsOptional()
+  @IsNumber()
+  maxDuration?: number;
 }

@@ -43,7 +43,14 @@ export class FlightService {
       const incompleteFlightDetails = await this.fetchIncompleteFlightDetails(sessionId);
   
       // Process and return the combined results
-      let filteredFlights = this.filterFlightsByPrice(incompleteFlightDetails, params.minPrice, params.maxPrice);
+      let filteredFlights = this.filterFlights(
+        incompleteFlightDetails,
+        params.minPrice,
+        params.maxPrice,
+        params.minDuration,
+        params.maxDuration
+      );
+      
       const sortedFlights = this.sortFlightsByPrice(filteredFlights);
   
       if (params.sorted === true) {
@@ -102,16 +109,18 @@ export class FlightService {
     };
   }
  
-  private filterFlightsByPrice(data: any, minPrice?: number, maxPrice?: number): any {
+  private filterFlights(data: any, minPrice?: number, maxPrice?: number, minDuration?: number, maxDuration?: number): any {
     if (data && data.data && data.data.itineraries && Array.isArray(data.data.itineraries)) {
-      // 如果沒有提供 minPrice 和 maxPrice，返回原始結果
-      if (minPrice === undefined && maxPrice === undefined) {
-        return data;
-      }
-      
       const filteredItineraries = data.data.itineraries.filter((itinerary: any) => {
         const price = itinerary.price.raw;
-        return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+        const duration = itinerary.legs.reduce((total: number, leg: any) => total + leg.durationInMinutes, 0);
+        
+        return (
+          (!minPrice || price >= minPrice) &&
+          (!maxPrice || price <= maxPrice) &&
+          (!minDuration || duration >= minDuration) &&
+          (!maxDuration || duration <= maxDuration)
+        );
       });
   
       return {
@@ -123,7 +132,7 @@ export class FlightService {
       };
     }
   
-    // 返回空的 itineraries 如果沒有找到任何數據
+    // Return empty itineraries if no data is found
     return {
       ...data,
       data: {
@@ -131,4 +140,5 @@ export class FlightService {
       },
     };
   }
+  
 }
