@@ -6,8 +6,8 @@ import { FlightRoundDto } from './dtos/flightRound.dto';
 export class FlightRoundService {
   private readonly apiUrl = 'https://sky-scanner3.p.rapidapi.com/flights/search-roundtrip';
   private readonly apiHost = 'sky-scanner3.p.rapidapi.com';
-  // private readonly apiKey = '715696da99msh4eb66db00001963p17718bjsneb0c681d5fa1';
-   private readonly apiKey = '574679b39emsh4ab6b34a8e5646bp1b5f4ajsn38891a3a3403';
+  //private readonly apiKey = '715696da99msh4eb66db00001963p17718bjsneb0c681d5fa1';
+  private readonly apiKey = '574679b39emsh4ab6b34a8e5646bp1b5f4ajsn38891a3a3403';
   //private readonly apiKey = 'c033ec79demshb519127d006c588p126f0ajsna590df900cea';
 
   async fetchRoundFlights(params: FlightRoundDto): Promise<any> {
@@ -67,8 +67,8 @@ export class FlightRoundService {
       return filteredFlights;
 
     } catch (error) {
-      console.error('Error fetching one-way flights:', error.response ? error.response.data : error.message);
-      throw new Error('Failed to fetch one-way flights');
+      console.error('Error fetching round flights:', error.response ? error.response.data : error.message);
+      throw new Error('Failed to fetch round flights');
     }
   }  
 

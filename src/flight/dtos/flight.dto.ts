@@ -62,4 +62,8 @@ export class FlightDto{
   @IsOptional()
   @IsDateString()
   maxArrival?: string;
+
+  @IsOptional()
+  @IsNumber()
+  stopCount?: number;
 }

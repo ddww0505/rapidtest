@@ -18,8 +18,8 @@ Content-Type: application/json
 {
   "fromEntityId": "TPE",
   "toEntityId": "LAXA",
-  "departDate": "2024-08-12",
-  "returnDate": "2024-08-13",
+  "departDate": "2024-08-13",
+  "returnDate": "2024-08-14",
   "adults": 1,
   "children": 0,
   "cabinClass": "economy",
@@ -36,8 +36,7 @@ Content-Type: application/json
   "departDate": "2024-08-12",
   "adults": 1,
   "children": 0,
-  "cabinClass": "economy",
-  "sorted": true
+  "cabinClass": "economy"
 }
 
 ###max and min test
